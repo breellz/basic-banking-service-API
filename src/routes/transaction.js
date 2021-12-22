@@ -4,60 +4,65 @@ const Auth = require("../middleware/auth");
 
 const router = new express.Router();
 
-//Create a new transaction
-router.post("/transaction", Auth, async (req, res) => {
-  const { transactionType, amount } = req.body;
+//withdrawal route
+router.post('/transaction/withdraw', Auth, async(req, res) => {
+  const { amount } = req.body;
+  try {
+    const user = req.user
+   
+    //check if user has sufficient balance to make withdrawal request
+
+    if( user.accountBalance >= amount ) {
+      const transaction = new Transaction({
+        owner: user._id,
+        transactionType: 'WITHDRAW',
+        ...req.body
+    })
+    await transaction.save()
+    user.accountBalance -= amount
+    await user.save();
+    res.status(200).send(transaction)
+    } else {
+      res.status(400).send({error: "Insufficient balance"})
+    }
+        
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
+//make a deposit
+router.post("/transaction/deposit", Auth, async (req, res) => {
+  const { amount } = req.body;
 
   try {
     //deposit money
-    const deposit = async () => {
       const user = req.user;
       //create a new transaction and save
       const transaction = new Transaction({
           owner: user._id,
+          transactionType: 'DEPOSIT',
           ...req.body
       })
       await transaction.save()
       user.accountBalance += amount;
       await user.save();
-      res.status(200).send(user);
-    };
+      res.status(200).send(transaction);
 
-    //withdraw money
-    const withdraw = async () => {
-        const user = req.user
-        const transaction = new Transaction({
-            owner: user._id,
-            ...req.body
-        })
-        await transaction.save()
-        user.accountBalance -= amount
-        await user.save();
-        res.status(200).send(user)
-    };
-
-    //Transfer to another account
-    const transfer = () => {
-
-    }
-
-    switch (transactionType) {
-      case "DEPOSIT":
-        deposit();
-        break;
-      case "WITHDRAW":
-        withdraw();
-        break;
-      case "TRANSFER":
-        transfer();
-        break;
-      default:
-        res.status(400).send({ messsage: "invalid transaction type" });
-    }
   } catch (error) {
-    console.log(error);
     res.status(400).send(error);
   }
 });
+
+//make transfer to another account
+
+router.post('/transaction/transfer', Auth, async( req, res ) => {
+  try {
+    
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+
 
 module.exports = router;
