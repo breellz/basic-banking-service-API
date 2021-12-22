@@ -7,6 +7,10 @@ const transactionSchema = new mongoose.Schema({
             ref: 'User',
             required: true
         },
+        isReversed: {
+            type: Boolean,
+            default: false,
+        },
         transactionType : {
             type: String,
             enum: ['DEPOSIT', 'TRANSFER', 'WITHDRAW'],

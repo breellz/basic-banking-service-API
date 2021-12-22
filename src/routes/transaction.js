@@ -37,6 +37,9 @@ router.post("/transaction", Auth, async (req, res) => {
     };
 
     //Transfer to another account
+    const transfer = () => {
+
+    }
 
     switch (transactionType) {
       case "DEPOSIT":
@@ -45,8 +48,9 @@ router.post("/transaction", Auth, async (req, res) => {
       case "WITHDRAW":
         withdraw();
         break;
-      case "Transfer":
+      case "TRANSFER":
         transfer();
+        break;
       default:
         res.status(400).send({ messsage: "invalid transaction type" });
     }
