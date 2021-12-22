@@ -27,10 +27,18 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
     accountNumber: {
         type: Number,
         required: true,
         unique: true,
+    },
+    accountBalance : {
+        type: Number,
+        default: 0
     },
     password: {
         type: String,

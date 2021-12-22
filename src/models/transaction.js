@@ -7,9 +7,13 @@ const transactionSchema = new mongoose.Schema({
             ref: 'User',
             required: true
         },
+        transactionType : {
+            type: String,
+            enum: ['DEPOSIT', 'TRANSFER', 'WITHDRAW'],
+            required: true
+        }, 
         destinationAccount: {
             type: Number,
-            required: true
         },
         amount: {
             type: Number,
@@ -24,4 +28,4 @@ const transactionSchema = new mongoose.Schema({
 })
 
 const Transaction = mongoose.model('transaction', transactionSchema)
-module.expoerts = Transaction
+module.exports = Transaction
