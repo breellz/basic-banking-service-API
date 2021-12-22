@@ -101,5 +101,36 @@ router.post('/transaction/transfer', Auth, async (req, res) => {
   }
 })
 
+//Get a specific type of transaction, it could be a transfer, deposit, withdrawal or CREDIT
+
+router.get('/transactions/specific', Auth, async (req, res) => {
+
+  if (!req.query.type) {
+    res.status(400).send({ message: 'Please specify transaction type ' })
+  }
+  const transactionType = req.query.type
+  try {
+    const transactions = await Transaction.find({ owner: req.user._id, transactionType }).sort({ createdAt: -1 }).exec()
+     if ( transactions.length === 0 ) {
+       res.status(404).send({ message: `You hvae not made any ${transactionType} transaction`})
+     } 
+      res.send(transactions)
+ 
+  } catch (error) {
+    res.status(400).send()
+  }
+})
+
+//Fetch all transactions 
+router.get('/transactions', Auth, async (req, res) => {
+  try {
+    const transactions = await Transaction.find({ owner : req.user._id }, null, {sort:{ createdAt: -1}})
+    res.send(transactions)
+  } catch (error) {
+    res.status(400).send()
+  }
+})
+
+
 
 module.exports = router;
