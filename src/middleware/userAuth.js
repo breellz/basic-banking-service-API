@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
-const auth = async (req, res, next) => {
+const userAuth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         const decoded = jwt.verify(token, 'bankingapi')
@@ -18,4 +18,4 @@ const auth = async (req, res, next) => {
     }
 }
 
-module.exports = auth
+module.exports = userAuth

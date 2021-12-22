@@ -1,28 +1,9 @@
 const express = require('express')
 const User = require('../models/user')
-const Auth = require('../middleware/auth')
-const generateAccountNumber = require('../utils/generateAccountNumber')
+const Auth = require('../middleware/userAuth')
+
 
 const router = new express.Router()
-
-//signup
-router.post('/users', async (req, res) => {
-    const userBody = req.body
-    userBody.accountNumber = generateAccountNumber()
-  
-    const user = new User(userBody)
-
-    try {
-        await user.save()
-        const token = await user.generateAuthToken()
-       
-        res.status(201).send({user, token})
-    } catch (error) {
-        console.log(error)
-        res.status(400).send(error)
-    }
-
-})
 
 //login
 
