@@ -1,0 +1,11 @@
+{
+  "name": "basic-banking-service-api",
+  "version": "1.0.0",
+  "description": "A basic banking service api",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Bassit Owolabi",
+  "license": "ISC"
+}
