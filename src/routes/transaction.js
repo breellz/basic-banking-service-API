@@ -48,7 +48,7 @@ router.post("/transaction/deposit", Auth, async (req, res) => {
     await transaction.save()
     user.accountBalance += amount;
     await user.save();
-    res.status(200).send(transaction);
+    res.status(200).send({transaction, user});
 
   } catch (error) {
     res.status(400).send(error);
@@ -112,7 +112,7 @@ router.get('/transactions/specific', Auth, async (req, res) => {
   try {
     const transactions = await Transaction.find({ owner: req.user._id, transactionType }).sort({ createdAt: -1 }).exec()
      if ( transactions.length === 0 ) {
-       res.status(404).send({ message: `You hvae not made any ${transactionType} transaction`})
+       res.status(404).send({ message: `You have not made any ${transactionType} transaction`})
      } 
       res.send(transactions)
  
