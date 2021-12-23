@@ -84,40 +84,97 @@ router.post('/admin/logoutAll', adminAuth, async (req, res) => {
     }
 })
 
-//reverse a transaction
+//reverse a deposit transaction
 
-router.post('/admin/transactions/reverse/:transactionId', adminAuth, async (req, res) => {
+router.post('/admin/transactions/reverse/deposit/:transactionId', adminAuth, async (req, res) => {
     const { transactionId } = req.params
     try {
         //fetch the transaction by it's Id
         const transaction = await Transaction.findOne({ _id: transactionId })
         //check if there's is no transaction or transaction has already been reversed
-        if (!transaction || transaction.isReversed === true ) {
-           throw new Error
+        if (!transaction || transaction.isReversed === true) {
+            res.status(400).send({message: "cannot reverse transaction"})
+            return
         }
-        //Reverse a deposit  or withdrawal transaction 
-        if(transaction.transactionType === 'DEPOSIT' || 'WITHDRAW' ) {
-            //Fetch the user account and correct their balance
-            const user = await User.findOne({ _id: transaction.owner })
-            if(!user) {
-                res.status(404).send({message: "no user was found"})
-            }
-            if(transaction.transactionType === 'DEPOSIT') {
-                user.accountBalance -= transaction.amount
-            } else {
-                user.accountBalance += transaction.amount
-            }
-            
-            await user.save()
-            //mark transaction as reversed
-            transaction.isReversed = true;
-            await transaction.save()
-            res.status(200).send({user, transaction})
+        //Fetch the user account and correct their balance
+
+        const user = await User.findOne({ _id: transaction.owner })
+        if (!user) {
+            res.status(404).send({ message: "no user was found" })
         }
-        //Reverse a withdrawal transaction
+        user.accountBalance -= transaction.amount
+
+        await user.save()
+        //mark transaction as reversed
+         transaction.isReversed = true;
+        await transaction.save()
+        res.status(200).send({ user, transaction })
+
     } catch (error) {
         console.log(error)
-        res.status(400).send()
+        res.status(400).send(error)
     }
 })
+
+//reverse a withdrawal transaction
+router.post('/admin/transactions/reverse/withdrawal/:transactionId', adminAuth, async (req, res) => {
+    const { transactionId } = req.params
+    try {
+        //fetch the transaction by it's Id
+        const transaction = await Transaction.findOne({ _id: transactionId })
+        //check if there's is no transaction or transaction has already been reversed
+        if (!transaction || transaction.isReversed === true) {
+            res.status(400).send({message: "cannot reverse transaction"})
+            return
+        }
+        //Fetch the user account and correct their balance
+
+        const user = await User.findOne({ _id: transaction.owner })
+        if (!user) {
+            res.status(404).send({ message: "no user was found" })
+        }
+        user.accountBalance += transaction.amount
+
+        await user.save()
+        //mark transaction as reversed
+        transaction.isReversed = true;
+        await transaction.save()
+        res.status(200).send({ user, transaction })
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).send(error)
+    }
+})
+
+//reverse a transfer transaction
+
+router.post('/admin/transactions/reverse/transfer/:transactionId', adminAuth, async(req, res) => {
+ //Reverse a TRANSFER transaction
+ const { transactionId } = req.params
+ try {
+     //fetch the transaction by it's Id
+     const transaction = await Transaction.findOne({ _id: transactionId })
+     //check if there's is no transaction or transaction has already been reversed
+     if (!transaction || transaction.isReversed === true) {
+        res.status(400).send({message: "cannot reverse transaction"})
+        return
+    }
+     //Fetch the user account and correct their balance
+    //fetch both the owner and recipient 
+    const owner = await User.findOne({ accountNumber: transaction.originatingAccount })
+    const recepient = await User.findOne({ accountNumber: transaction.destinationAccount })
+    owner.accountBalance += transaction.amount
+    recepient.accountBalance -= transaction.amount
+    await owner.save()
+    await recepient.save()
+   // transaction.isReversed = true
+    await transaction.save()
+    res.send({ owner, recepient, transaction})  
+ } catch (error) {
+     res.status(400).send(error)
+ }  
+})
+
+
 module.exports = router

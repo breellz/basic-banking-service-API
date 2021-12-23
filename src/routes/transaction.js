@@ -70,6 +70,7 @@ router.post('/transaction/transfer', Auth, async (req, res) => {
         const transfer = new Transaction({
           owner: user._id,
           transactionType: 'TRANSFER',
+          originatingAccount: user.accountNumber,
           ...req.body
         })
         await transfer.save()
