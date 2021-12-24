@@ -102,7 +102,7 @@ router.post('/transaction/transfer', Auth, async (req, res) => {
   }
 })
 
-//Get a specific type of transaction, it could be a TRANSFER, DEPOSIT, WITHDRAWAL or CREDIT
+//Get a specific type of transaction, it could be a TRANSFER, DEPOSIT, WITHDRAW or CREDIT
 
 router.get('/transactions/specific', Auth, async (req, res) => {
 
