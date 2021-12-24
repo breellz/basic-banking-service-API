@@ -186,5 +186,19 @@ router.delete('/admin/users/:userId', adminAuth, async (req, res) => {
     }
 })
 
+/*disable user account 
+switch isDisabled property to true, then make sure all disabled users don't have access */
+
+router.post('/admin/users/:userId', adminAuth, async(req, res) => {
+    try {
+        const user = await User.findOne({ _id : req.params.userId})
+        user.isDisabled = true
+        await user.save()
+        res.send(user)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+})
+
 
 module.exports = router

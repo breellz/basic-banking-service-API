@@ -34,10 +34,6 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    isAdmin: {
-        type: Boolean,
-        default: false,
-    },
     isDisabled: {
         type: Boolean,
         default: false,
@@ -88,6 +84,10 @@ userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
     if (!user) {
         throw new Error('Unable to log in')
+    }
+    //check if user account is isDisabled and restrict access
+    if(user.isDisabled === true) {
+        throw new Error('Your account is disabled, please contact support for further assistance')
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if(!isMatch) {
