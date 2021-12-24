@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Transaction = require('../models/transaction')
 const ObjectID = mongoose.Schema.Types.ObjectId
 
 const userSchema = new mongoose.Schema({
@@ -106,6 +107,13 @@ userSchema.pre('save', async function(next) {
     next()
 })
 
+//delete user transactions when a user is deleted
+
+userSchema.pre('remove', async function(next) {
+    const user = this
+    await Transaction.deleteMany({ owner: user._id})
+    next()
+})
 
 const User = mongoose.model('User', userSchema)
 
