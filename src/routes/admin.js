@@ -58,7 +58,7 @@ router.post('/admin/login', async (req, res) => {
     }
 })
 
-//logout
+//logout adminstrator account
 router.post('/admin/logout', adminAuth, async (req, res) => {
 
     try {
@@ -73,7 +73,7 @@ router.post('/admin/logout', adminAuth, async (req, res) => {
     }
 })
 
-//Logout All 
+//Logout All administrator login sessions
 router.post('/admin/logoutAll', adminAuth, async (req, res) => {
     try {
         req.admin.tokens = []
@@ -160,7 +160,6 @@ router.post('/admin/transactions/reverse/transfer/:transactionId', adminAuth, as
         res.status(400).send({message: "cannot reverse transaction"})
         return
     }
-     //Fetch the user account and correct their balance
     //fetch both the owner and recipient 
     const owner = await User.findOne({ accountNumber: transaction.originatingAccount })
     const recepient = await User.findOne({ accountNumber: transaction.destinationAccount })
@@ -174,6 +173,17 @@ router.post('/admin/transactions/reverse/transfer/:transactionId', adminAuth, as
  } catch (error) {
      res.status(400).send(error)
  }  
+})
+
+//delete user 
+router.delete('/admin/users/:userId', adminAuth, async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.userId })
+        await user.remove()
+        res.send(user)
+    } catch (error) {
+        res.status(400).send(error)
+    }
 })
 
 
