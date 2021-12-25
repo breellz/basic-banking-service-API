@@ -4,8 +4,11 @@
   "description": "A basic banking service api",
   "main": "app.js",
   "scripts": {
-    "dev": "env-cmd -f ./config/dev.env nodemon src/app.js",
-    "test": "jest"
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "env-cmd -f ./config/test.env jest --detectOpenHandles --watch"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "Bassit Owolabi",
   "license": "ISC",
@@ -18,6 +21,8 @@
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
-    "nodemon": "^2.0.15"
+    "jest": "^27.4.5",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6"
   }
 }
