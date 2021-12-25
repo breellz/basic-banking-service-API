@@ -4,8 +4,10 @@ const mongoose = require('mongoose')
 const app = require('../src/app')
 const Admin = require('../src/models/admin')
 const User = require('../src/models/user')
+const Transaction = require('../src/models/transaction')
 
 const adminOneId = new mongoose.Types.ObjectId()
+const userOneId = new mongoose.Types.ObjectId()
 
 const adminOne = {
     _id: adminOneId,
@@ -17,10 +19,24 @@ const adminOne = {
     }]
 }
 
+const userOne = {
+    _id: userOneId,
+    firstName: "katy",
+    lastName: "Adams",
+    email: "k@a.com",
+    createdBy: adminOneId,
+    accountNumber: 345879234,
+    password: "23454345",
+    tokens : [{
+        token: jwt.sign({_id:userOneId }, 'bankingapi')
+    }]
+}
+
 beforeEach(async () => {
     await Admin.deleteMany()
     await User.deleteMany()
     await new Admin(adminOne).save()
+    await new User(userOne).save()
 })
 
 describe('All tests related to admin signup & login', () => {
@@ -53,10 +69,12 @@ describe('All tests related to admin signup & login', () => {
             password: "23454345"
         }).expect(400)
     })
+    
     test('Should trigger an error if admin already exists', async () => {
         await request(app).post('/admin')
             .send(adminOne).expect(400)
     })
+    
     test("Should log in existing administrator", async () => {
        const response = await request(app).post('/admin/login').send({
             email: "h@g.com",
@@ -66,6 +84,7 @@ describe('All tests related to admin signup & login', () => {
         const admin = await Admin.findById(adminOneId)
         expect(response.body.token).toBe(admin.tokens[1].token)
     })
+
     test("should not log in non-existent user", async () => {
         await request(app).post('/admin/login').send({
             email: "h@e.com",
@@ -95,5 +114,31 @@ describe('All test cases related to admin privileges on users', () => {
                 email: "h@j.com",
                 password: "23454345"
             }).expect(401)
+    })
+    // test('should reverse a deposit transaction', async() => {
+
+    // })
+    test('should delete a user', async() => {
+        const response = await request(app)
+        .delete(`/admin/users/${userOneId}`)
+        .set('Authorization', `Bearer ${adminOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+
+        // assert user was deleted
+        const user = await User.findById(response.body._id);
+        expect(user).toBeNull()
+    })
+
+    test('should disable a user account', async () => {
+        const response = await request(app)
+        .post(`/admin/users/${userOneId}`)
+        .set('Authorization', `Bearer ${adminOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+
+        // assert user was deleted
+        const user = await User.findById(response.body._id);
+        expect(user.isDisabled).toBe(true)
     })
 })
