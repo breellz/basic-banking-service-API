@@ -33,3 +33,34 @@ Only administrators can create accounts for users
 Admins can delete user accounts(all their transactions are deleted also)
 
 Admins can reverse a transaction and also disable a user's account
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+1 fork the repo
+
+2. clone to your local machine
+
+3. ```npm install```
+
+4. ```npm start```
+
+### Prerequisites
+* npm packages
+
+```npm install```
+
+### Installation
+
+1. fork the repo
+
+2. clone the Repo
+
+3. install dependencies 
+```npm install```
+
+4. run dev server
+```npm run dev```
+
+5. Test components
+```npm test```
