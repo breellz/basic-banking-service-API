@@ -51,7 +51,6 @@ describe('All tests related to admin signup & login', () => {
       const admin = await Admin.findById(response.body.admin._id)
       expect(admin).not.toBeNull()
       //assertions about the response 
-      console.log(response.body)
       expect(response.body).toMatchObject({
           admin: {
             userName: "bassit",
@@ -85,7 +84,7 @@ describe('All tests related to admin signup & login', () => {
         expect(response.body.token).toBe(admin.tokens[1].token)
     })
 
-    test("should not log in non-existent user", async () => {
+    test("should not log in non-existent admin", async () => {
         await request(app).post('/admin/login').send({
             email: "h@e.com",
             password: "23454345"

@@ -17,7 +17,6 @@ router.post('/admin', async (req, res) => {
 
         res.status(201).send({ admin, token })
     } catch (error) {
-        console.log(error)
         res.status(400).send(error)
     }
 
@@ -39,7 +38,6 @@ router.post('/admin/users', adminAuth, async (req, res) => {
 
         res.status(201).send({ user, token })
     } catch (error) {
-        console.log(error)
         res.status(400).send(error)
     }
 
@@ -53,7 +51,6 @@ router.post('/admin/login', async (req, res) => {
         const token = await admin.generateAuthToken()
         res.send({ admin, token })
     } catch (error) {
-        console.log(error)
         res.status(400).send(error)
     }
 })
@@ -111,7 +108,6 @@ router.post('/admin/transactions/reverse/deposit/:transactionId', adminAuth, asy
         res.status(200).send({ user, transaction })
 
     } catch (error) {
-        console.log(error)
         res.status(400).send(error)
     }
 })
@@ -142,7 +138,6 @@ router.post('/admin/transactions/reverse/withdrawal/:transactionId', adminAuth, 
         res.status(200).send({ user, transaction })
 
     } catch (error) {
-        console.log(error)
         res.status(400).send(error)
     }
 })
