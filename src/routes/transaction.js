@@ -6,7 +6,7 @@ const Auth = require("../middleware/userAuth");
 const router = new express.Router();
 
 //withdrawal route
-router.post('/transaction/withdraw', Auth, async (req, res) => {
+router.post('/transactions/withdraw', Auth, async (req, res) => {
   const { amount } = req.body;
   try {
     const user = req.user
@@ -33,7 +33,7 @@ router.post('/transaction/withdraw', Auth, async (req, res) => {
 })
 
 //make a deposit
-router.post("/transaction/deposit", Auth, async (req, res) => {
+router.post("/transactions/deposit", Auth, async (req, res) => {
   const { amount } = req.body;
 
   try {
@@ -57,7 +57,7 @@ router.post("/transaction/deposit", Auth, async (req, res) => {
 
 //make transfer to another account
 
-router.post('/transaction/transfer', Auth, async (req, res) => {
+router.post('/transactions/transfer', Auth, async (req, res) => {
   const { destinationAccount, amount } = req.body
   try {
     const user = req.user
@@ -87,7 +87,7 @@ router.post('/transaction/transfer', Auth, async (req, res) => {
         await user.save();
         recepient.accountBalance += amount
         await recepient.save();
-        res.status(201).send({ transfer, credit })
+        res.status(201).send({ user, recepient, transfer, credit })
 
       } else {
         res.status(404).send({ message: "invalid account number" })
