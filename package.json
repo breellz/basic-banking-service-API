@@ -2,7 +2,7 @@
   "name": "basic-banking-service-api",
   "version": "1.0.0",
   "description": "A basic banking service api",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start":"node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
