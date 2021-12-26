@@ -1,6 +1,9 @@
 Documentation can be found here:
 https://documenter.getpostman.com/view/11784799/UVREiitp
 
+Deployed here:
+https://breellz-banking-service-api.herokuapp.com/
+
 Features
 
 Users can:
