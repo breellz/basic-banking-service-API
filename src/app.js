@@ -1,5 +1,5 @@
 const express = require('express')
-const userRouter = require('./routes/user')
+const userRouter = require('./routes/user.temp')
 const adminRouter = require('./routes/admin')
 const transactionRouter = require('./routes/transaction')
 
