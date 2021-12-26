@@ -93,7 +93,7 @@ userSchema.methods.generateAuthToken = async function () {
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
     if (!user) {
-        throw new Error('Unable to log in')
+        throw new Error('Email is not registered')
     }
     //check if user account is isDisabled and restrict access
     if(user.isDisabled === true) {
@@ -101,7 +101,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if(!isMatch) {
-        throw new Error('Unable to login')
+        throw new Error('Credentials do not match')
     }
 
     return user

@@ -1,13 +1,14 @@
 const express = require('express')
 const User = require('../models/user')
 const Auth = require('../middleware/userAuth')
+const { loginValidationRules, validate } = require('../middleware/validators/Login')
 
 
 const router = new express.Router()
 
 //login
 
-router.post('/users/login', async (req, res) => {
+router.post('/users/login', loginValidationRules(), validate, async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()

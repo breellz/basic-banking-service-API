@@ -4,7 +4,7 @@
   "description": "A basic banking service api",
   "main": "index.js",
   "scripts": {
-    "start":"node src/index.js",
+    "start": "node src/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
     "test": "env-cmd -f ./config/test.env jest --detectOpenHandles --watch"
   },
@@ -16,6 +16,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
+    "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.3",
     "validator": "^13.7.0"

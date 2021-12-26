@@ -9,6 +9,10 @@ const router = new express.Router();
 router.post('/transactions/withdraw', Auth, async (req, res) => {
   const { amount } = req.body;
   try {
+    if(typeof(amount) === 'string') {
+      res.status(400).send({error: "amount must be a number"})
+      return
+    }
     const user = req.user
 
     //check if user has sufficient balance to make withdrawal request
@@ -33,10 +37,14 @@ router.post('/transactions/withdraw', Auth, async (req, res) => {
 })
 
 //make a deposit
-router.post("/transactions/deposit", Auth, async (req, res) => {
+router.post("/transactions/deposit", Auth,  async (req, res) => {
   const { amount } = req.body;
 
   try {
+    if(typeof(amount) === 'string') {
+      res.status(400).send({error: "amount must be a number"})
+      return
+    }
     //deposit money
     const user = req.user;
     //create a new transaction and save
@@ -57,9 +65,12 @@ router.post("/transactions/deposit", Auth, async (req, res) => {
 
 //make transfer to another account
 
-router.post('/transactions/transfer', Auth, async (req, res) => {
+router.post('/transactions/transfer', Auth,  async (req, res) => {
   const { destinationAccount, amount } = req.body
   try {
+    if(!destinationAccount || typeof(amount) !== 'number' ) {
+      throw new Error('Destination account and amount are required and must be of type number')
+    }
     const user = req.user
     //check if user has enough money in his account to transfer
     if (user.accountBalance >= amount) {
@@ -90,7 +101,7 @@ router.post('/transactions/transfer', Auth, async (req, res) => {
         res.status(201).send({ user, recepient, transfer, credit })
 
       } else {
-        res.status(404).send({ message: "invalid account number" })
+        res.status(404).send({ message: "no user with that account number" })
       }
 
     } else {
@@ -98,7 +109,7 @@ router.post('/transactions/transfer', Auth, async (req, res) => {
     }
 
   } catch (error) {
-    res.status(400).send(error)
+    res.status(400).send({error: error.message})
   }
 })
 
