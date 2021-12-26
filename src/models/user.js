@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const Transaction = require('../models/transaction')
+const Transaction = require('./transaction')
 const ObjectID = mongoose.Schema.Types.ObjectId
 
 const userSchema = new mongoose.Schema({
