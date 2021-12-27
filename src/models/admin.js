@@ -79,6 +79,16 @@ adminSchema.pre('save', async function(next) {
 
     next()
 })
+//hide private data
+adminSchema.methods.toJSON = function () {
+    const admin = this
+    const adminObject = admin.toObject()
+
+    delete adminObject.password
+    delete adminObject.tokens
+
+    return adminObject
+}
 
 
 const Admin = mongoose.model('Admin', adminSchema)

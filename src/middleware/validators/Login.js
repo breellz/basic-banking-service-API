@@ -1,5 +1,5 @@
 const { body, validationResult } = require('express-validator')
-const loginValidationRules = () => {
+const validationRules = () => {
   return [
     // username must be an email
     body('email').isEmail().withMessage('Email is invalid'),
@@ -23,6 +23,6 @@ const validate = (req, res, next) => {
 }
 
 module.exports = {
-  loginValidationRules,
+  validationRules,
   validate,
 }

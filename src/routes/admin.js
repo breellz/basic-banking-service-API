@@ -4,11 +4,12 @@ const adminAuth = require('../middleware/adminAuth')
 const User = require('../models/user')
 const Transaction = require("../models/transaction");
 const generateAccountNumber = require('../utils/generateAccountNumber')
+const { validationRules, validate } = require('../middleware/validators/Login')
 
 const router = new express.Router()
 
 //create new administrator account
-router.post('/admin', async (req, res) => {
+router.post('/admin', validationRules(), validate, async (req, res) => {
     const admin = new Admin(req.body)
 
     try {
@@ -23,7 +24,7 @@ router.post('/admin', async (req, res) => {
 })
 
 //create new users
-router.post('/admin/users', adminAuth, async (req, res) => {
+router.post('/admin/users', validationRules(), validate, adminAuth, async (req, res) => {
     const userBody = req.body
     userBody.accountNumber = generateAccountNumber()
 
@@ -45,7 +46,7 @@ router.post('/admin/users', adminAuth, async (req, res) => {
 
 //login administrator account
 
-router.post('/admin/login', async (req, res) => {
+router.post('/admin/login',  validationRules(), validate, async (req, res) => {
     try {
         const admin = await Admin.findByCredentials(req.body.email, req.body.password)
         const token = await admin.generateAuthToken()
