@@ -4,6 +4,12 @@ https://documenter.getpostman.com/view/11784799/UVREiitp
 Deployed here:
 https://breellz-banking-service-api.herokuapp.com/
 
+Local Server url:
+localhost:3000
+
+production server url:
+https://breellz-banking-service-api.herokuapp.com
+
 Features
 
 Users can:
