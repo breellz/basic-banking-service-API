@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express')
 const userRouter = require('./routes/user')
 const adminRouter = require('./routes/admin')
@@ -12,7 +13,11 @@ app.use(userRouter)
 app.use(adminRouter)
 app.use(transactionRouter)
 
+const publicDirectory = path.join(__dirname, '../public')
+app.use(express.static(publicDirectory))
 
-
+app.get('/', (req, res) => {
+    res.sendFile('index.html')
+})
 module.exports = app
 
