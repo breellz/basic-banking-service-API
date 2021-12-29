@@ -192,6 +192,9 @@ switch isDisabled property to true, then make sure all disabled users don't have
 router.post('/admin/users/:userId', adminAuth, async(req, res) => {
     try {
         const user = await User.findOne({ _id : req.params.userId})
+        if(user.isDisabled === true) {
+            return res.status(400).send({message: 'User already disabled'})
+        }
         if(!user) {
             return res.status(400).send({message: 'User not found'})
         }
