@@ -26,7 +26,7 @@ router.post('/transactions/withdraw', Auth, async (req, res) => {
       await transaction.save()
       user.accountBalance -= amount
       await user.save();
-      res.status(200).send(transaction)
+      res.status(200).send({transaction, user})
     } else {
       res.status(400).send({ error: "Insufficient balance" })
     }
